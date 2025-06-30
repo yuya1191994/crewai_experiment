@@ -110,7 +110,8 @@ ls
 pwd
 
 # README.mdがあることを確認（正しい場所にいる証拠）
-ls README.md
+ls
+# README.mdファイルが見つかるか確認
 ```
 
 **Step 2: .envファイルを作成**
