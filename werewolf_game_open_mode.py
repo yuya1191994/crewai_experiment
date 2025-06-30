@@ -33,10 +33,10 @@ class WerewolfLogger:
         # warewolf_logs ディレクトリを作成（既存でもエラーなし）
         os.makedirs("warewolf_logs", exist_ok=True)
         
-        # ランダムな数字でログファイル名を生成
+        # タイムスタンプでログファイル名を生成（最新順で並ぶ）
         timestamp = datetime.datetime.now()
-        random_num = random.randint(1000, 9999)
-        self.log_file = f"warewolf_logs/{random_num}.md"
+        timestamp_str = timestamp.strftime("%Y%m%d%H%M%S")
+        self.log_file = f"warewolf_logs/open_mode_{timestamp_str}.md"
         
         # ログファイルを初期化
         with open(self.log_file, 'w', encoding='utf-8') as f:
