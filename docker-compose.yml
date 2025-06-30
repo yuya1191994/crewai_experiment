@@ -5,4 +5,6 @@ services:
     tty: true
     command: tail -f /dev/null
     environment:
-      - GOOGLE_API_KEY=${GOOGLE_API_KEY} 
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+    volumes:
+      - .:/app  # ホストの現在ディレクトリをコンテナの/appにマウント 

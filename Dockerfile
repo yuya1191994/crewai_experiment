@@ -24,6 +24,6 @@ ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY main.py .
+COPY . .
 
-CMD ["python", "main.py"] 
+CMD ["python", "engineers_discussion.py", "werewolf_game_open_mode.py", "werewolf_game_anonymous_mode.py"] 
