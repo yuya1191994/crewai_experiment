@@ -40,7 +40,7 @@ class WerewolfLogger:
         
         # ログファイルを初期化
         with open(self.log_file, 'w', encoding='utf-8') as f:
-            f.write(f"🐺 CrewAI人狼ゲーム ログ - {timestamp.strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"🐺 CrewAI人狼ゲーム ログ - {timestamp.strftime('%Y%m%d%H%M%S')}\n")
             f.write("=" * 80 + "\n\n")
         
         print(f"📝 ログファイル作成: {self.log_file}")
