@@ -26,4 +26,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "engineers_discussion.py", "werewolf_game_open_mode.py", "werewolf_game_anonymous_mode.py"] 
+CMD ["python", "archive/engineers_discussion.py", "werewolf_game_open_mode.py", "werewolf_game_anonymous_mode.py"] 

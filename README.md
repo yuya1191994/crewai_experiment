@@ -137,22 +137,13 @@ GOOGLE_API_KEY={GoogleAIStudioで作成したAPIキーをペースト}
 - APIキーの前後にスペースや引用符は不要です
 - ファイル名は `.env` （ドット + env）です
 
-### 3️⃣ エンジニア議論を見る
-```bash
-# Docker環境で実行
-docker-compose up --build
-
-# または直接実行
-docker exec -it crewai_experiment-app-1 python engineers_discussion.py
-```
-
-### 4️⃣ 人狼ゲーム・匿名版で推理
+### 3️⃣ 人狼ゲーム・匿名版で推理
 ```bash
 # 匿名版（推理チャレンジ）
 docker exec -it crewai_experiment-app-1 python werewolf_game_anonymous_mode.py
 ```
 
-### 5️⃣ 人狼ゲーム・オープン版で戦略学習
+### 4️⃣ 人狼ゲーム・オープン版で戦略学習
 ```bash
 # オープン版（戦略観戦）
 docker exec -it crewai_experiment-app-1 python werewolf_game_open_mode.py
@@ -164,8 +155,7 @@ docker exec -it crewai_experiment-app-1 python werewolf_game_open_mode.py
 ```
 warewolf_logs/
 ├── anonymous_werewolf_20241215143052.md  ← 匿名版
-├── open_mode_20241215152231.md           ← オープン版  
-└── engineers_20241215161845.md           ← エンジニア議論
+└── open_mode_20241215152231.md           ← オープン版
 ```
 
 🔥 **ここがアツいポイントだ！**
