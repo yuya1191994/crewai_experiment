@@ -2,10 +2,62 @@
 import os
 import random
 import datetime
+import re
 from crewai import Agent, Task, Crew, LLM
 
 # --------------------------------------------------------------------
-# 1. LLM（大規模言語モデル）のセットアップ
+# 1. ユーティリティ関数
+# --------------------------------------------------------------------
+def extract_clean_speech(raw_output):
+    """CrewAIの出力から思考過程を除去し、日本語の発言部分のみ抽出"""
+    output_str = str(raw_output).strip()
+    
+    # まず空文字チェック
+    if not output_str:
+        return "（発言なし）"
+    
+    # "Thought:"が含まれている場合、思考部分を除去
+    if "Thought:" in output_str:
+        # "Thought:"以降の部分を除去
+        clean_output = output_str.split("Thought:")[0].strip()
+        if clean_output:
+            return clean_output
+    
+    # 英語の一般的なフレーズを除去
+    patterns_to_remove = [
+        r'Agent Final Answer:.*?(?=\n|$)',
+        r'Final Answer:.*?(?=\n|$)',  
+        r'Action:.*?(?=\n|$)',
+        r'Observation:.*?(?=\n|$)',
+        r'I need to.*?(?=\n|$)',
+        r'Based on.*?(?=\n|$)'
+    ]
+    
+    cleaned = output_str
+    for pattern in patterns_to_remove:
+        cleaned = re.sub(pattern, '', cleaned, flags=re.IGNORECASE | re.DOTALL)
+    
+    # 改行で分割して日本語が含まれる行のみを保持
+    lines = cleaned.split('\n')
+    japanese_lines = []
+    
+    for line in lines:
+        line = line.strip()
+        if line and re.search(r'[ひらがなカタカナ漢字]', line):
+            japanese_lines.append(line)
+    
+    if japanese_lines:
+        return '\n'.join(japanese_lines)
+    
+    # 日本語が見つからない場合でも、空でなければそのまま返す
+    cleaned = cleaned.strip()
+    if cleaned:
+        return cleaned
+    
+    return "（発言なし）"
+
+# --------------------------------------------------------------------
+# 2. LLM（大規模言語モデル）のセットアップ
 # --------------------------------------------------------------------
 def setup_llm():
     """Gemini LLMを初期化（CrewAI 0.134.0版）"""
@@ -415,7 +467,7 @@ def main():
                     single_crew = Crew(
                         agents=[task.agent],
                         tasks=[task],
-                        verbose=True
+                        verbose=False  # Agent Final Answerを隠すため
                     )
                     
                     # プレイヤー名を特定
@@ -428,7 +480,9 @@ def main():
                     logger.log_and_print(f"\n{player_name}が発言中...")
                     
                     result = single_crew.kickoff()
-                    logger.log_and_print(f"\n{player_name}: {result}")
+                    # 思考過程を除去してクリーンな発言のみ抽出
+                    clean_result = extract_clean_speech(str(result))
+                    logger.log_and_print(f"\n{player_name}: {clean_result}")
                     
                 except Exception as e:
                     logger.log_and_print(f"❌ {player_name}の発言エラー: {e}")
@@ -446,7 +500,7 @@ def main():
                     single_crew = Crew(
                         agents=[task.agent],
                         tasks=[task],
-                        verbose=True
+                        verbose=False  # Agent Final Answerを隠すため
                     )
                     
                     # プレイヤー名を特定
@@ -456,7 +510,9 @@ def main():
                     logger.log_and_print(f"\n{player_name}が投票中...")
                     
                     result = single_crew.kickoff()
-                    logger.log_and_print(f"\n{player_name}の投票: {result}")
+                    # 思考過程を除去してクリーンな投票のみ抽出
+                    clean_result = extract_clean_speech(str(result))
+                    logger.log_and_print(f"\n{player_name}の投票: {clean_result}")
                     
                 except Exception as e:
                     logger.log_and_print(f"❌ {player_name}の投票エラー: {e}")
